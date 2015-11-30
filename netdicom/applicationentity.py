@@ -203,9 +203,9 @@ class Association(threading.Thread):
                 # check if idle timer has expired
                 logger.debug("checking DUL idle timer")
                 if self.DUL.idle_timer_expired():
-                    logger.warning('%s: DUL provider idle timer expired' % (self.name))  
+                    logger.warning('%s: DUL provider idle timer expired' % (self.name))
                     self.Kill()
- 
+
 
 
 
@@ -242,8 +242,6 @@ class AE(threading.Thread):
                                                socket.SOCK_STREAM)
         self.LocalServerSocket.setsockopt(socket.SOL_SOCKET,
                                           socket.SO_REUSEADDR, 1)
-        self.LocalServerSocket.bind(('', port))
-        self.LocalServerSocket.listen(1)
         self.MaxPDULength = MaxPDULength
 
         # build presentation context definition list to be sent to remote AE
@@ -296,6 +294,11 @@ class AE(threading.Thread):
             # triggered by the user
             return
         count = 0
+
+        # Bind to the local port when necessary
+        self.LocalServerSocket.bind(('', self.LocalAE['Port']))
+        self.LocalServerSocket.listen(1)
+
         while 1:
             # main loop
             time.sleep(0.1)
