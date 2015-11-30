@@ -1,8 +1,11 @@
 #!/usr/bin/env python
-from distribute_setup import use_setuptools
-use_setuptools()
-
-from setuptools import setup, find_packages
+try:
+    from setuptools import setup, find_packages
+except:
+    from distribute_setup import use_setuptools
+    use_setuptools()
+    from setuptools import setup, find_packages
+    
 import os
 import os.path
 
