@@ -1052,7 +1052,7 @@ class GenericUserDataSubItem(pdu):
     def FromParams(self, Params):
         self.ItemLength = len(Params.UserData)
         self.UserData = Params.UserData
-        seld.ItemType = Params.ItemType
+        self.ItemType = Params.ItemType
 
     def ToParams(self):
         tmp = GenericUserDataSubItem()
