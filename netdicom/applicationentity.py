@@ -30,7 +30,7 @@ logger = logging.getLogger('netdicom.applicationentity')
 
 class Association(threading.Thread):
 
-    def __init__(self, LocalAE, ClientSocket=None, RemoteAE=None):
+    def __init__(self, LocalAE, ClientSocket=None, RemoteAE=None, userdata=None):
         if not ClientSocket and not RemoteAE:
             raise
         if ClientSocket and RemoteAE:
@@ -53,6 +53,10 @@ class Association(threading.Thread):
         self.SOPClassesAsSCU = []
         self.AssociationEstablished = False
         self.AssociationRefused = None
+
+        # Store any extended User Information (if any)
+        self.UserDataItems = userdata or list()
+
         self.start()
 
     def GetSOPClass(self, ds):
@@ -141,6 +145,9 @@ class Association(threading.Thread):
                 tmp.SCURole = 0
                 tmp.SCPRole = 1
                 ext.append(tmp)
+
+            # Place any additional items into the request
+            ext.extend(self.UserDataItems)
 
             ans = self.ACSE.Request(self.AE.LocalAE, self.RemoteAE,
                                     self.AE.MaxPDULength,
@@ -346,9 +353,9 @@ class AE(threading.Thread):
                 # when we logoff.
                 continue
 
-    def RequestAssociation(self, remoteAE):
+    def RequestAssociation(self, remoteAE, **kwargs):
         """Requests association to a remote application entity"""
-        assoc = Association(self, RemoteAE=remoteAE)
+        assoc = Association(self, RemoteAE=remoteAE, **kwargs)
         while not assoc.AssociationEstablished \
                 and not assoc.AssociationRefused and not assoc.DUL.kill:
             time.sleep(0.1)
