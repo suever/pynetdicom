@@ -1058,6 +1058,7 @@ class GenericUserDataSubItem(pdu):
         tmp = GenericUserDataSubItem()
         tmp.ItemType = self.ItemType
         tmp.UserData = self.UserData
+        tmp.ItemLength = len(self.UserData)
         return tmp
 
     def Encode(self):
