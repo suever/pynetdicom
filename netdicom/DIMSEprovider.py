@@ -72,21 +72,21 @@ class DIMSEServiceProvider(object):
                 if nxt is None:
                     continue
                 if nxt.__class__ is not P_DATA_ServiceParameters:
-                    return None, None
+                    return None, None, None
                 if self.message.Decode(self.DUL.Receive(Wait, Timeout)):
                     tmp = self.message
                     self.message = None
                     logger.debug('Decoded DIMSE message: %s', str(tmp))
-                    return tmp.ToParams(), tmp.ID
+                    return tmp.ToParams(), tmp.ID, tmp
         else:
             cls = self.DUL.Peek().__class__
             if cls not in (type(None), P_DATA_ServiceParameters):
                 logger.debug('Waiting for P-DATA but received %s', cls)
-                return None, None
+                return None, None, None
             if self.message.Decode(self.DUL.Receive(Wait, Timeout)):
                 tmp = self.message
                 self.message = None
                 logger.debug('Received DIMSE message: %s', tmp)
-                return tmp.ToParams(), tmp.ID
+                return tmp.ToParams(), tmp.ID, tmp
             else:
-                return None, None
+                return None, None, None

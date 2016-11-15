@@ -62,7 +62,7 @@ class VerificationServiceClass(ServiceClass):
 
         self.DIMSE.Send(cecho, self.pcid, self.maxpdulength)
 
-        ans, id = self.DIMSE.Receive(Wait=True)
+        ans, id, msg = self.DIMSE.Receive(Wait=True)
         return self.Code2Status(ans.Status)
 
     def SCP(self, msg):
@@ -130,7 +130,7 @@ class StorageServiceClass(ServiceClass):
         self.DIMSE.Send(csto, self.pcid, self.maxpdulength)
 
         # wait for c-store response
-        ans, id = self.DIMSE.Receive(Wait=True)
+        ans, id, msg = self.DIMSE.Receive(Wait=True)
         return self.Code2Status(ans.Status.value)
 
     def __init__(self):
@@ -222,7 +222,7 @@ class QueryRetrieveFindSOPClass(QueryRetrieveServiceClass):
         while 1:
             time.sleep(0.001)
             # wait for c-find responses
-            ans, id = self.DIMSE.Receive(Wait=False)
+            ans, id, msg = self.DIMSE.Receive(Wait=False)
             if not ans:
                 continue
             d = dsutils.decode(
@@ -327,7 +327,7 @@ class QueryRetrieveGetSOPClass(QueryRetrieveServiceClass):
 
         while 1:
             # receive c-store
-            msg, id = self.DIMSE.Receive(Wait=True)
+            msg, id, msg = self.DIMSE.Receive(Wait=True)
             if msg.__class__ == C_GET_ServiceParameters:
                 if self.Code2Status(msg.Status.value).Type == 'Pending':
                     # pending. intermediate C-GET response
@@ -423,7 +423,7 @@ class QueryRetrieveMoveSOPClass(QueryRetrieveServiceClass):
         while 1:
             # wait for c-move responses
             time.sleep(0.001)
-            ans, id = self.DIMSE.Receive(Wait=False)
+            ans, id, msg = self.DIMSE.Receive(Wait=False)
 
             if not ans:
                 continue
@@ -431,7 +431,7 @@ class QueryRetrieveMoveSOPClass(QueryRetrieveServiceClass):
             status = self.Code2Status(ans.Status.value)
 
             # Return the status as well as the response object
-            yield status, ans
+            yield status, ans, msg
 
             if status is None or status.Type != 'Pending':
                 break
@@ -554,7 +554,7 @@ class ModalityWorklistServiceSOPClass (BasicWorklistServiceClass):
         while 1:
             time.sleep(0.001)
             # wait for c-find responses
-            ans, id = self.DIMSE.Receive(Wait=False)
+            ans, id, msg = self.DIMSE.Receive(Wait=False)
             if not ans:
                 continue
             d = dsutils.decode(

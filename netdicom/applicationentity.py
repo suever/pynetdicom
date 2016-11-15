@@ -174,7 +174,7 @@ class Association(threading.Thread):
             # time.sleep(1)
             # look for incoming DIMSE message
             if self.Mode == 'Acceptor':
-                dimsemsg, pcid = self.DIMSE.Receive(Wait=False, Timeout=None)
+                dimsemsg, pcid, msg = self.DIMSE.Receive(Wait=False, Timeout=None)
                 if dimsemsg:
                     # dimse message received
                     uid = dimsemsg.AffectedSOPClassUID

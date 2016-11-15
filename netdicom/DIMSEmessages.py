@@ -526,9 +526,6 @@ class C_GET_RSP_Message(DIMSEMessage):
         except:
             pass
         tmp.Identifier = self.DataSet
-
-        # Include the original message
-        tmp.Message = self
         return tmp
 
 
@@ -629,7 +626,6 @@ class C_MOVE_RSP_Message(DIMSEMessage):
             pass
 
         tmp.Identifier = self.DataSet
-        tmp.Message = self
         return tmp
 
 
