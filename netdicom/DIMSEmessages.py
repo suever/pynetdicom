@@ -622,12 +622,14 @@ class C_MOVE_RSP_Message(DIMSEMessage):
         try:
             tmp.NumberOfRemainingSubOperations = self.CommandSet[
                 (0x0000, 0x1020)]
+            tmp.NumberOfCompletedSubOperations = self.CommandSet[(0x0000, 0x1021)]
+            tmp.NumberOfFailedSubOperations = self.CommandSet[(0x0000, 0x1022)]
+            tmp.NumberOfWarningSubOperations = self.CommandSet[(0x0000, 0x1023)]
         except:
             pass
-        tmp.NumberOfCompletedSubOperations = self.CommandSet[(0x0000, 0x1021)]
-        tmp.NumberOfFailedSubOperations = self.CommandSet[(0x0000, 0x1022)]
-        tmp.NumberOfWarningSubOperations = self.CommandSet[(0x0000, 0x1023)]
+
         tmp.Identifier = self.DataSet
+        tmp.Message = self
         return tmp
 
 
