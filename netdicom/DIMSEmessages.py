@@ -526,6 +526,9 @@ class C_GET_RSP_Message(DIMSEMessage):
         except:
             pass
         tmp.Identifier = self.DataSet
+
+        # Include the original message
+        tmp.Message = self
         return tmp
 
 
