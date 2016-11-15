@@ -424,12 +424,17 @@ class QueryRetrieveMoveSOPClass(QueryRetrieveServiceClass):
             # wait for c-move responses
             time.sleep(0.001)
             ans, id = self.DIMSE.Receive(Wait=False)
+
             if not ans:
                 continue
-            status = self.Code2Status(ans.Status.value).Type
-            if status != 'Pending':
+
+            status = self.Code2Status(ans.Status.value)
+
+            # Return the status as well as the response object
+            yield status, ans
+
+            if status is None or status.Type != 'Pending':
                 break
-            yield status
 
     def SCP(self, msg):
         ds = dsutils.decode(msg.Identifier, self.transfersyntax.is_implicit_VR,
@@ -641,10 +646,10 @@ class DigitalIntraOralXRayImageProcessingStorageSOPClass(StorageSOPClass):
 
 class EncapsulatedPDFStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.104.1'
-    
+
 class GrayscaleSoftcopyPresentationStateStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.11.1'
-    
+
 class ColorSoftcopyPresentationStateStorageSOPClass(StorageSOPClass):
     UID = '1.2.840.10008.5.1.4.1.1.11.2'
 
