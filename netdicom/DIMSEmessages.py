@@ -519,10 +519,10 @@ class C_GET_RSP_Message(DIMSEMessage):
         tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
         tmp.Status = self.CommandSet[(0x0000, 0x0900)]
         try:
-            tmp.NumberOfRemainingSubOperations = self.CommandSet[(0x0000, 0x1020)]
             tmp.NumberOfCompletedSubOperations = self.CommandSet[(0x0000, 0x1021)]
             tmp.NumberOfFailedSubOperations = self.CommandSet[(0x0000, 0x1022)]
             tmp.NumberOfWarningSubOperations = self.CommandSet[(0x0000, 0x1023)]
+            tmp.NumberOfRemainingSubOperations = self.CommandSet[(0x0000, 0x1020)]
         except:
             pass
         tmp.Identifier = self.DataSet
@@ -617,11 +617,10 @@ class C_MOVE_RSP_Message(DIMSEMessage):
         tmp.MessageIDBeingRespondedTo = self.CommandSet[(0x0000, 0x0120)]
         tmp.Status = self.CommandSet[(0x0000, 0x0900)]
         try:
-            tmp.NumberOfRemainingSubOperations = self.CommandSet[
-                (0x0000, 0x1020)]
             tmp.NumberOfCompletedSubOperations = self.CommandSet[(0x0000, 0x1021)]
             tmp.NumberOfFailedSubOperations = self.CommandSet[(0x0000, 0x1022)]
             tmp.NumberOfWarningSubOperations = self.CommandSet[(0x0000, 0x1023)]
+            tmp.NumberOfRemainingSubOperations = self.CommandSet[(0x0000, 0x1020)]
         except:
             pass
 
